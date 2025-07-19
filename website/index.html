@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esoteric Geometric Object Viewer</title>
+    <title>3D Jewelry Viewer</title>
     <style>
         * {
             margin: 0;
@@ -261,30 +261,25 @@
         </div>
 
         <div class="ui-overlay">
-            <div class="title">⧬ Esoteric Geometry Viewer ⧬</div>
+            <div class="title">💎 3D Jewelry Viewer 💎</div>
             <div class="controls">
                 <div class="control-group">
                     <label class="control-label">Object:</label>
                     <select id="objectSelect">
-                        <option value="icosahedron">Icosahedron</option>
-                        <option value="dodecahedron">Dodecahedron</option>
-                        <option value="octahedron">Octahedron</option>
-                        <option value="tetrahedron">Tetrahedron</option>
-                        <option value="torus">Torus</option>
-                        <option value="torusKnot">Torus Knot</option>
-                        <option value="sierpinski">Sierpinski</option>
-                        <option value="fractal">Fractal Sphere</option>
-                        <option value="merkaba">Merkaba</option>
-                        <option value="flower">Flower of Life</option>
+                        <option value="brilliant">Brilliant Cut</option>
+                        <option value="princess">Princess Cut</option>
+                        <option value="emerald">Emerald Cut</option>
+                        <option value="marquise">Marquise Cut</option>
+                        <option value="oval">Oval Cut</option>
                     </select>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Material:</label>
                     <select id="materialSelect">
-                        <option value="wireframe">Wireframe</option>
-                        <option value="solid">Solid</option>
-                        <option value="glass">Glass</option>
-                        <option value="hologram">Hologram</option>
+                        <option value="diamond">Diamond</option>
+                        <option value="ruby">Ruby</option>
+                        <option value="sapphire">Sapphire</option>
+                        <option value="opal">Opal</option>
                         <option value="crystal">Crystal</option>
                     </select>
                 </div>
@@ -305,10 +300,9 @@
         </div>
 
         <div class="info-panel">
-            <div class="info-title">Current Object: Icosahedron</div>
+            <div class="info-title">Current Object: Brilliant Cut</div>
             <div id="objectInfo">
-                A polyhedron with 20 identical equilateral triangular faces. 
-                Sacred geometry symbol representing the element of water and divine consciousness.
+                The most popular diamond cut featuring 57–58 facets for maximum sparkle.
             </div>
             <br>
             <div style="color: #888; font-size: 0.7rem;">
@@ -332,16 +326,11 @@
 
         // Object information
         const objectInfo = {
-            icosahedron: "A polyhedron with 20 identical equilateral triangular faces. Sacred geometry symbol representing the element of water and divine consciousness.",
-            dodecahedron: "A polyhedron with 12 pentagonal faces. Associated with the universe and cosmic energy in Platonic philosophy.",
-            octahedron: "Eight triangular faces forming a double pyramid. Represents the element of air and mental clarity.",
-            tetrahedron: "Four triangular faces forming a pyramid. The simplest polyhedron, symbolizing fire and manifestation.",
-            torus: "A doughnut-shaped surface of revolution. Represents the flow of energy and the eternal cycle of creation.",
-            torusKnot: "A closed curve that winds around a torus. Symbol of interconnectedness and infinite loops of existence.",
-            sierpinski: "A fractal triangle with infinite recursive patterns. Represents the self-similar nature of reality.",
-            fractal: "A sphere with fractal surface displacement. Demonstrates the infinite complexity within simple forms.",
-            merkaba: "Two interlocking tetrahedra forming a star. Ancient symbol of divine light vehicle and spiritual transformation.",
-            flower: "Multiple intersecting circles forming sacred patterns. The Flower of Life represents creation and universal geometry."
+            brilliant: "The most popular diamond cut featuring 57–58 facets for maximum sparkle.",
+            princess: "A contemporary square cut known for its sharp corners and brilliant facets.",
+            emerald: "A rectangular step cut showcasing long, dramatic facets and clarity.",
+            marquise: "An elongated shape with pointed ends, maximizing perceived size and elegance.",
+            oval: "A rounded, elongated shape combining brilliance with a flattering silhouette."
         };
 
         function init() {
@@ -363,6 +352,7 @@
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.physicallyCorrectLights = true;
 
             // Lighting
             const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
@@ -382,7 +372,7 @@
             scene.add(pointLight2);
 
             // Create initial object
-            createObject('icosahedron', 'wireframe');
+            createObject('brilliant', 'diamond');
 
             // Event listeners
             setupEventListeners();
@@ -403,38 +393,24 @@
             let geometry;
             
             switch(type) {
-                case 'icosahedron':
-                    geometry = new THREE.IcosahedronGeometry(2, 1);
+                case 'brilliant':
+                    geometry = createBrilliantCutGeometry();
                     break;
-                case 'dodecahedron':
-                    geometry = new THREE.DodecahedronGeometry(2, 0);
+                case 'princess':
+                    geometry = new THREE.BoxGeometry(2, 2, 2);
                     break;
-                case 'octahedron':
-                    geometry = new THREE.OctahedronGeometry(2, 0);
+                case 'emerald':
+                    geometry = new THREE.BoxGeometry(2.4, 1.6, 2.4);
                     break;
-                case 'tetrahedron':
-                    geometry = new THREE.TetrahedronGeometry(2, 0);
+                case 'marquise':
+                    geometry = createMarquiseGeometry();
                     break;
-                case 'torus':
-                    geometry = new THREE.TorusGeometry(1.5, 0.5, 16, 100);
-                    break;
-                case 'torusKnot':
-                    geometry = new THREE.TorusKnotGeometry(1.5, 0.3, 100, 16);
-                    break;
-                case 'sierpinski':
-                    geometry = createSierpinskiGeometry();
-                    break;
-                case 'fractal':
-                    geometry = createFractalSphere();
-                    break;
-                case 'merkaba':
-                    geometry = createMerkabaGeometry();
-                    break;
-                case 'flower':
-                    geometry = createFlowerOfLifeGeometry();
+                case 'oval':
+                    geometry = new THREE.SphereGeometry(2, 32, 16);
+                    geometry.scale(1.5, 1, 1);
                     break;
                 default:
-                    geometry = new THREE.IcosahedronGeometry(2, 1);
+                    geometry = createBrilliantCutGeometry();
             }
 
             const material = createMaterial(materialType);
@@ -450,198 +426,82 @@
 
         function createMaterial(type) {
             switch(type) {
-                case 'wireframe':
-                    return new THREE.MeshBasicMaterial({ 
-                        color: 0x00ff88, 
-                        wireframe: true,
-                        linewidth: 2
-                    });
-                case 'solid':
-                    return new THREE.MeshPhongMaterial({ 
-                        color: 0x00ff88,
-                        shininess: 100,
-                        specular: 0x111111
-                    });
-                case 'glass':
-                    return new THREE.MeshPhysicalMaterial({ 
-                        color: 0x88ffff,
-                        transparent: true,
-                        opacity: 0.6,
-                        roughness: 0,
+                case 'diamond':
+                    return new THREE.MeshPhysicalMaterial({
+                        color: 0xffffff,
                         metalness: 0,
-                        transmission: 0.9,
-                        thickness: 0.5
+                        roughness: 0,
+                        ior: 2.417,
+                        transmission: 1,
+                        thickness: 0.5,
+                        envMapIntensity: 1,
+                        clearcoat: 1,
+                        clearcoatRoughness: 0
                     });
-                case 'hologram':
-                    return new THREE.MeshBasicMaterial({ 
-                        color: 0x00ffff,
-                        transparent: true,
-                        opacity: 0.7,
-                        side: THREE.DoubleSide
+                case 'ruby':
+                    return new THREE.MeshPhysicalMaterial({
+                        color: 0xe0115f,
+                        metalness: 0,
+                        roughness: 0.05,
+                        ior: 1.77,
+                        transmission: 0.9,
+                        thickness: 0.8
+                    });
+                case 'sapphire':
+                    return new THREE.MeshPhysicalMaterial({
+                        color: 0x0f52ba,
+                        metalness: 0,
+                        roughness: 0.05,
+                        ior: 1.77,
+                        transmission: 0.9,
+                        thickness: 0.8
+                    });
+                case 'opal':
+                    return new THREE.MeshPhysicalMaterial({
+                        color: 0xffffff,
+                        metalness: 0,
+                        roughness: 0.2,
+                        ior: 1.45,
+                        transmission: 0.8,
+                        thickness: 1,
+                        iridescence: 0.3 || undefined // property available in newer three versions
                     });
                 case 'crystal':
-                    return new THREE.MeshPhysicalMaterial({ 
-                        color: 0xff88ff,
-                        metalness: 0.2,
-                        roughness: 0.1,
-                        clearcoat: 1.0,
-                        clearcoatRoughness: 0.1
+                    return new THREE.MeshPhysicalMaterial({
+                        color: 0xddddff,
+                        metalness: 0,
+                        roughness: 0,
+                        ior: 1.5,
+                        transmission: 0.95,
+                        thickness: 0.6
                     });
                 default:
-                    return new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true });
+                    return new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
             }
         }
 
-        function createSierpinskiGeometry() {
-            const geometry = new THREE.BufferGeometry();
-            const vertices = [];
-            const indices = [];
-
-            function addTriangle(a, b, c, depth) {
-                if (depth === 0) {
-                    const idx = vertices.length / 3;
-                    vertices.push(...a, ...b, ...c);
-                    indices.push(idx, idx + 1, idx + 2);
-                } else {
-                    const ab = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2];
-                    const bc = [(b[0] + c[0]) / 2, (b[1] + c[1]) / 2, (b[2] + c[2]) / 2];
-                    const ca = [(c[0] + a[0]) / 2, (c[1] + a[1]) / 2, (c[2] + a[2]) / 2];
-                    
-                    addTriangle(a, ab, ca, depth - 1);
-                    addTriangle(ab, b, bc, depth - 1);
-                    addTriangle(ca, bc, c, depth - 1);
-                }
-            }
-
-            const size = 2;
-            addTriangle(
-                [0, size, 0],
-                [-size, -size, 0],
-                [size, -size, 0],
-                4
-            );
-
-            geometry.setIndex(indices);
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-            geometry.computeVertexNormals();
-            return geometry;
-        }
-
-        function createFractalSphere() {
-            const geometry = new THREE.SphereGeometry(2, 64, 32);
+        function createBrilliantCutGeometry() {
+            const geometry = new THREE.OctahedronGeometry(2, 2);
             const position = geometry.attributes.position;
-            
+            const vertex = new THREE.Vector3();
+
             for (let i = 0; i < position.count; i++) {
-                const x = position.getX(i);
-                const y = position.getY(i);
-                const z = position.getZ(i);
-                
-                const noise = Math.sin(x * 5) * Math.cos(y * 5) * Math.sin(z * 5) * 0.1;
-                const length = Math.sqrt(x * x + y * y + z * z);
-                const factor = (2 + noise) / length;
-                
-                position.setXYZ(i, x * factor, y * factor, z * factor);
+                vertex.fromBufferAttribute(position, i);
+                // Flatten crown, elongate pavilion
+                if (vertex.y > 0) {
+                    vertex.y *= 0.6;
+                } else {
+                    vertex.y *= 1.2;
+                }
+                position.setXYZ(i, vertex.x, vertex.y, vertex.z);
             }
-            
             geometry.computeVertexNormals();
             return geometry;
         }
 
-        function createMerkabaGeometry() {
-            const geometry = new THREE.BufferGeometry();
-            const vertices = [];
-            const indices = [];
-
-            // Create two interlocked tetrahedra
-            const size = 2;
-            const height = size * Math.sqrt(2/3);
-
-            // First tetrahedron (pointing up)
-            const tetra1 = [
-                [0, height, 0],
-                [-size, -height/3, size],
-                [size, -height/3, size],
-                [0, -height/3, -size]
-            ];
-
-            // Second tetrahedron (pointing down)
-            const tetra2 = [
-                [0, -height, 0],
-                [-size, height/3, -size],
-                [size, height/3, -size],
-                [0, height/3, size]
-            ];
-
-            function addTetrahedron(verts, offset) {
-                const start = offset;
-                vertices.push(...verts[0], ...verts[1], ...verts[2], ...verts[3]);
-                
-                // Add faces
-                indices.push(
-                    start, start + 1, start + 2,
-                    start, start + 2, start + 3,
-                    start, start + 3, start + 1,
-                    start + 1, start + 3, start + 2
-                );
-            }
-
-            addTetrahedron(tetra1, 0);
-            addTetrahedron(tetra2, 4);
-
-            geometry.setIndex(indices);
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-            geometry.computeVertexNormals();
-            return geometry;
-        }
-
-        function createFlowerOfLifeGeometry() {
-            const geometry = new THREE.BufferGeometry();
-            const vertices = [];
-            const indices = [];
-
-            const radius = 0.5;
-            const segments = 32;
-            const rings = 3;
-
-            function addCircle(centerX, centerY, centerZ, startIdx) {
-                for (let i = 0; i <= segments; i++) {
-                    const theta = (i / segments) * Math.PI * 2;
-                    const x = centerX + Math.cos(theta) * radius;
-                    const y = centerY + Math.sin(theta) * radius;
-                    vertices.push(x, y, centerZ);
-
-                    if (i < segments) {
-                        indices.push(startIdx + i, startIdx + i + 1, startIdx + segments + 1);
-                    }
-                }
-                vertices.push(centerX, centerY, centerZ); // Center vertex
-                
-                for (let i = 0; i < segments; i++) {
-                    indices.push(startIdx + segments + 1, startIdx + i, startIdx + (i + 1) % segments);
-                }
-            }
-
-            // Center circle
-            addCircle(0, 0, 0, 0);
-            let vertexCount = segments + 2;
-
-            // Surrounding circles
-            for (let ring = 1; ring <= rings; ring++) {
-                const circleCount = ring * 6;
-                const ringRadius = ring * radius * Math.sqrt(3);
-                
-                for (let i = 0; i < circleCount; i++) {
-                    const angle = (i / circleCount) * Math.PI * 2;
-                    const x = Math.cos(angle) * ringRadius;
-                    const y = Math.sin(angle) * ringRadius;
-                    addCircle(x, y, Math.sin(ring) * 0.2, vertexCount);
-                    vertexCount += segments + 2;
-                }
-            }
-
-            geometry.setIndex(indices);
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-            geometry.computeVertexNormals();
+        function createMarquiseGeometry() {
+            const geometry = new THREE.SphereGeometry(2, 64, 32);
+            geometry.scale(2, 1, 1); // elongate along X
             return geometry;
         }
 
