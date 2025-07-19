@@ -1,707 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lee Kuan Yew - Singapore's Founding Father</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Esoteric Object Viewer</title>
     <style>
-        /* リセットとベーススタイル */
-        * {
+        /* Mobile-first, full-screen canvas */
+        html, body {
+            height: 100%;
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            background: #000; /* dark backdrop for better contrast */
+            overflow: hidden; /* prevent page scrolling */
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* スムーズスクロール */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* ナビゲーション */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 1rem 0;
-            transition: all 0.3s ease;
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: #dc3545;
-        }
-
-        /* ヒーローセクション */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(135deg, #dc3545, #fff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>') repeat;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .hero-content {
-            z-index: 2;
-            max-width: 800px;
-            padding: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            color: white;
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards;
-        }
-
-        .hero .subtitle {
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.3s forwards;
-        }
-
-        .hero .dates {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.8);
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.6s forwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* セクション共通スタイル */
-        .section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: #dc3545;
-        }
-
-        /* 伝記セクション */
-        .biography {
-            background: #f8f9fa;
-        }
-
-        .bio-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .bio-image {
-            width: 100%;
-            height: 400px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .bio-image img {
+        #viewer {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            display: block;
+            touch-action: none; /* allow pinch-zoom / rotate without browser gestures */
         }
 
-        .bio-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-
-        /* タイムライン */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .timeline::before {
-            content: '';
+        /* Subtle on-screen helper text */
+        #hint {
             position: absolute;
-            top: 0;
+            bottom: 1rem;
             left: 50%;
-            width: 4px;
-            height: 100%;
-            background: #dc3545;
             transform: translateX(-50%);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin: 2rem 0;
-            opacity: 0;
-            animation: slideIn 0.6s ease forwards;
-        }
-
-        .timeline-item:nth-child(odd) {
-            padding-right: 50%;
-            text-align: right;
-            animation-delay: 0.1s;
-        }
-
-        .timeline-item:nth-child(even) {
-            padding-left: 50%;
-            text-align: left;
-            animation-delay: 0.2s;
-        }
-
-        .timeline-content {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-left: 4px solid #dc3545;
-            transition: transform 0.3s ease;
-        }
-
-        .timeline-content:hover {
-            transform: translateY(-5px);
-        }
-
-        .timeline-year {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #dc3545;
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-event {
-            font-size: 1rem;
-            color: #666;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 統計インフォグラフィック */
-        .statistics {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            color: white;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #dc3545;
-            display: block;
-            margin-bottom: 1rem;
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* 円グラフアニメーション */
-        .circular-progress {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: conic-gradient(#dc3545 0deg, #dc3545 252deg, rgba(255,255,255,0.2) 252deg);
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .circular-progress::before {
-            content: '';
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #2c3e50;
-            position: absolute;
-        }
-
-        .progress-text {
-            position: relative;
-            z-index: 1;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        /* アチーブメントセクション */
-        .achievements {
-            background: #f8f9fa;
-        }
-
-        .achievement-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .achievement-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .achievement-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-
-        .achievement-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, #dc3545, #e74c3c);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .achievement-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: #2c3e50;
-        }
-
-        .achievement-desc {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* フッター */
-        footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* レスポンシブデザイン */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero .subtitle {
-                font-size: 1.2rem;
-            }
-
-            .bio-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .timeline::before {
-                left: 20px;
-            }
-
-            .timeline-item {
-                padding-left: 50px !important;
-                padding-right: 0 !important;
-                text-align: left !important;
-            }
-
-            .timeline-item::before {
-                left: 20px !important;
-            }
-
-            nav ul {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .section {
-                padding: 3rem 1rem;
-            }
-        }
-
-        /* スクロールインジケーター */
-        .scroll-indicator {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(220, 53, 69, 0.2);
-            z-index: 1001;
-        }
-
-        .scroll-progress {
-            height: 100%;
-            background: #dc3545;
-            width: 0%;
-            transition: width 0.1s ease;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 1rem;
+            pointer-events: none;
+            user-select: none;
         }
     </style>
 </head>
 <body>
-    <!-- スクロールインジケーター -->
-    <div class="scroll-indicator">
-        <div class="scroll-progress" id="scrollProgress"></div>
-    </div>
+    <canvas id="viewer"></canvas>
+    <div id="hint">Drag to rotate • Pinch/Scroll to zoom</div>
 
-    <!-- ナビゲーション -->
-    <nav>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#biography">Biography</a></li>
-            <li><a href="#timeline">Timeline</a></li>
-            <li><a href="#achievements">Achievements</a></li>
-            <li><a href="#statistics">Impact</a></li>
-        </ul>
-    </nav>
+    <!-- Three.js & controls via ES modules -->
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.157.0/build/three.module.js';
+        import { OrbitControls } from 'https://unpkg.com/three@0.157.0/examples/jsm/controls/OrbitControls.js';
 
-    <!-- ヒーローセクション -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Lee Kuan Yew</h1>
-            <p class="subtitle">Singapore's Founding Father</p>
-            <p class="dates">1923 - 2015</p>
-        </div>
-    </section>
+        // Core setup
+        const canvas = document.getElementById('viewer');
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
-    <!-- 伝記セクション -->
-    <section id="biography" class="section biography">
-        <h2 class="section-title">Biography</h2>
-        <div class="bio-grid">
-            <div class="bio-image">
-                <img src="lee_kuan_yew_1975.jpg" alt="Lee Kuan Yew portrait from 1975">
-            </div>
-            <div class="bio-text">
-                <p>Lee Kuan Yew was a Singaporean statesman and lawyer who served as the first Prime Minister of Singapore from 1959 to 1990. He is widely recognized as the founding father of modern Singapore.</p>
-                
-                <p>Born into a middle-class family during the British colonial era, Lee was educated at Raffles Institution and later at the University of Cambridge, where he studied law. Upon returning to Singapore, he became involved in politics and co-founded the People's Action Party (PAP) in 1954.</p>
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
 
-                <p>Under his leadership, Singapore transformed from a developing country to a developed nation within a single generation, achieving remarkable economic growth and social stability. His pragmatic approach to governance and emphasis on meritocracy, multiracialism, and economic development became known as the "Singapore Model."</p>
+        // Camera
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 4);
 
-                <p>Lee Kuan Yew's legacy continues to influence Singapore's policies and governance philosophy today, making him one of the most influential political figures in Southeast Asian history.</p>
-            </div>
-        </div>
-    </section>
+        // Controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; // smooth motion
+        controls.enablePan = false; // keep center
+        controls.minDistance = 1.5;
+        controls.maxDistance = 10;
 
-    <!-- タイムラインセクション -->
-    <section id="timeline" class="section">
-        <h2 class="section-title">Life Timeline</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1923</div>
-                    <div class="timeline-event">Born in Singapore during British colonial rule</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1946</div>
-                    <div class="timeline-event">Graduated from Cambridge University with First Class Honours in Law</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1954</div>
-                    <div class="timeline-event">Co-founded the People's Action Party (PAP)</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1959</div>
-                    <div class="timeline-event">Became Singapore's first Prime Minister</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1963</div>
-                    <div class="timeline-event">Led Singapore into the Federation of Malaysia</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1965</div>
-                    <div class="timeline-event">Singapore gained independence from Malaysia</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1990</div>
-                    <div class="timeline-event">Stepped down as Prime Minister after 31 years</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">2015</div>
-                    <div class="timeline-event">Passed away at age 91, leaving behind a transformed nation</div>
-                </div>
-            </div>
-        </div>
-    </section>
+        // Lighting
+        const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambient);
+        const dir = new THREE.DirectionalLight(0xffffff, 1.0);
+        dir.position.set(5, 5, 5);
+        scene.add(dir);
 
-    <!-- 統計セクション -->
-    <section id="statistics" class="section statistics">
-        <h2 class="section-title">Singapore's Transformation Under Lee Kuan Yew</h2>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="circular-progress">
-                    <span class="progress-text">70%</span>
-                </div>
-                <span class="stat-label">GDP Growth Rate<br>During His Tenure</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">$400</span>
-                <span class="stat-label">GDP per capita in 1965<br>(at independence)</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">$15,000</span>
-                <span class="stat-label">GDP per capita in 1990<br>(when he stepped down)</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">31</span>
-                <span class="stat-label">Years as<br>Prime Minister</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">99%</span>
-                <span class="stat-label">Literacy Rate<br>Achieved</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">2.1M</span>
-                <span class="stat-label">Population in 1965<br>to 3M in 1990</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- アチーブメントセクション -->
-    <section id="achievements" class="section achievements">
-        <h2 class="section-title">Key Achievements</h2>
-        <div class="achievement-grid">
-            <div class="achievement-card">
-                <div class="achievement-icon">🏛️</div>
-                <div class="achievement-title">Political Stability</div>
-                <div class="achievement-desc">Established a stable multi-party democracy with strong institutions and rule of law that continues to govern Singapore effectively.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">💼</div>
-                <div class="achievement-title">Economic Miracle</div>
-                <div class="achievement-desc">Transformed Singapore from a third-world country to a first-world nation in just one generation through strategic economic policies.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">🌐</div>
-                <div class="achievement-title">Multiracial Harmony</div>
-                <div class="achievement-desc">Built a harmonious multiracial society where Chinese, Malay, Indian, and other ethnic groups coexist peacefully.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">🎓</div>
-                <div class="achievement-title">Education System</div>
-                <div class="achievement-desc">Developed one of the world's best education systems, emphasizing meritocracy and bilingual education.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">🏠</div>
-                <div class="achievement-title">Public Housing</div>
-                <div class="achievement-desc">Created a comprehensive public housing program that houses over 80% of Singapore's population in high-quality apartments.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">🌿</div>
-                <div class="achievement-title">Garden City</div>
-                <div class="achievement-desc">Transformed Singapore into a "Garden City" with extensive urban planning and environmental conservation efforts.</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- フッター -->
-    <footer>
-        <div class="footer-content">
-            <h3>Lee Kuan Yew</h3>
-            <p>"I have never been overconcerned or obsessed with opinion polls or popularity polls. I think a leader who is, is a weak leader."</p>
-            <p style="margin-top: 2rem; opacity: 0.7;">&copy; 2024 Biography Website. Educational Purpose Only.</p>
-        </div>
-    </footer>
-
-    <script>
-        // スクロールプログレスバー
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const maxHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = (scrolled / maxHeight) * 100;
-            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+        // Esoteric geometry: Torus Knot with emissive, metal surface
+        const geometry = new THREE.TorusKnotGeometry(1, 0.35, 256, 32, 2, 3);
+        const material = new THREE.MeshPhysicalMaterial({
+            color: 0xff3e96,
+            metalness: 0.85,
+            roughness: 0.25,
+            clearcoat: 1,
+            clearcoatRoughness: 0.1,
+            emissive: 0x111111,
         });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
 
-        // タイムラインアニメーション（スクロールに応じて表示）
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
-                }
-            });
-        }, observerOptions);
-
-        // 全てのタイムラインアイテムを監視
-        document.querySelectorAll('.timeline-item').forEach(item => {
-            item.style.animationPlayState = 'paused';
-            observer.observe(item);
-        });
-
-        // 統計カードのホバーエフェクト強化
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-10px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // スムーズナビゲーション
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = document.querySelector(link.getAttribute('href'));
-                const navHeight = document.querySelector('nav').offsetHeight;
-                const targetPosition = target.offsetTop - navHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // 数字カウントアップアニメーション
-        function animateCountUp(element, target, duration = 2000) {
-            let start = 0;
-            const increment = target / (duration / 16);
-            
-            function updateCount() {
-                start += increment;
-                if (start < target) {
-                    element.textContent = Math.floor(start);
-                    requestAnimationFrame(updateCount);
-                } else {
-                    element.textContent = target;
-                }
-            }
-            updateCount();
+        // Auto-rotate for flair
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsed = clock.getElapsedTime();
+            mesh.rotation.x = elapsed * 0.2;
+            mesh.rotation.y = elapsed * 0.4;
+            controls.update();
+            renderer.render(scene, camera);
         }
+        animate();
 
-        // 統計セクションが表示されたときにアニメーション開始
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // 数字のカウントアップアニメーション
-                    const statNumbers = entry.target.querySelectorAll('.stat-number');
-                    statNumbers.forEach(stat => {
-                        const text = stat.textContent;
-                        const number = parseInt(text.replace(/[^0-9]/g, ''));
-                        if (number) {
-                            stat.textContent = '0';
-                            setTimeout(() => animateCountUp(stat, number), 500);
-                        }
-                    });
-                    
-                    statsObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
-
-        const statsSection = document.querySelector('.statistics');
-        if (statsSection) {
-            statsObserver.observe(statsSection);
-        }
+        // Handle resize
+        window.addEventListener('resize', () => {
+            const { innerWidth: w, innerHeight: h } = window;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        });
     </script>
 </body>
 </html>
