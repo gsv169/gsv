@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esoteric Geometric Object Viewer</title>
+    <title>3D Jewelry Viewer</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Courier New', monospace;
+            font-family: 'Georgia', serif;
             background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
             color: #fff;
             overflow: hidden;
@@ -56,8 +56,8 @@
         .title {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #00ff88;
-            text-shadow: 0 0 10px #00ff88;
+            color: #ffd700;
+            text-shadow: 0 0 10px #ffd700;
         }
 
         .controls {
@@ -81,7 +81,7 @@
 
         select, button {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #00ff88;
+            border: 1px solid #ffd700;
             color: #fff;
             padding: 5px 10px;
             border-radius: 5px;
@@ -91,13 +91,13 @@
         }
 
         select:hover, button:hover {
-            background: rgba(0, 255, 136, 0.2);
-            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            background: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
         select:focus, button:focus {
             outline: none;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
         }
 
         .zoom-controls {
@@ -114,8 +114,8 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: rgba(0, 255, 136, 0.2);
-            border: 2px solid #00ff88;
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #ffd700;
             color: #fff;
             font-size: 1.5rem;
             font-weight: bold;
@@ -127,7 +127,7 @@
         }
 
         .zoom-btn:hover {
-            background: rgba(0, 255, 136, 0.4);
+            background: rgba(255, 215, 0, 0.4);
             transform: scale(1.1);
         }
 
@@ -139,14 +139,14 @@
             background: rgba(0, 0, 0, 0.8);
             padding: 15px;
             border-radius: 10px;
-            border: 1px solid #00ff88;
+            border: 1px solid #ffd700;
             max-width: 250px;
             font-size: 0.8rem;
             line-height: 1.4;
         }
 
         .info-title {
-            color: #00ff88;
+            color: #ffd700;
             font-weight: bold;
             margin-bottom: 5px;
         }
@@ -163,8 +163,8 @@
         .loading-spinner {
             width: 50px;
             height: 50px;
-            border: 3px solid rgba(0, 255, 136, 0.3);
-            border-top: 3px solid #00ff88;
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            border-top: 3px solid #ffd700;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 10px;
@@ -176,7 +176,7 @@
         }
 
         .loading-text {
-            color: #00ff88;
+            color: #ffd700;
             font-size: 1rem;
         }
 
@@ -257,35 +257,38 @@
     <div id="container">
         <div class="loading" id="loading">
             <div class="loading-spinner"></div>
-            <div class="loading-text">Loading 3D Engine...</div>
+            <div class="loading-text">Loading Jewelry Viewer...</div>
         </div>
 
         <div class="ui-overlay">
-            <div class="title">⧬ Esoteric Geometry Viewer ⧬</div>
+            <div class="title">💎 3D Jewelry Viewer 💎</div>
             <div class="controls">
                 <div class="control-group">
-                    <label class="control-label">Object:</label>
+                    <label class="control-label">Cut:</label>
                     <select id="objectSelect">
-                        <option value="icosahedron">Icosahedron</option>
-                        <option value="dodecahedron">Dodecahedron</option>
-                        <option value="octahedron">Octahedron</option>
-                        <option value="tetrahedron">Tetrahedron</option>
-                        <option value="torus">Torus</option>
-                        <option value="torusKnot">Torus Knot</option>
-                        <option value="sierpinski">Sierpinski</option>
-                        <option value="fractal">Fractal Sphere</option>
-                        <option value="merkaba">Merkaba</option>
-                        <option value="flower">Flower of Life</option>
+                        <option value="brilliant">Brilliant Cut</option>
+                        <option value="princess">Princess Cut</option>
+                        <option value="emerald">Emerald Cut</option>
+                        <option value="oval">Oval Cut</option>
+                        <option value="pear">Pear Cut</option>
+                        <option value="marquise">Marquise Cut</option>
+                        <option value="cushion">Cushion Cut</option>
+                        <option value="asscher">Asscher Cut</option>
+                        <option value="round">Round Cut</option>
+                        <option value="heart">Heart Cut</option>
                     </select>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Material:</label>
+                    <label class="control-label">Gemstone:</label>
                     <select id="materialSelect">
-                        <option value="wireframe">Wireframe</option>
-                        <option value="solid">Solid</option>
-                        <option value="glass">Glass</option>
-                        <option value="hologram">Hologram</option>
-                        <option value="crystal">Crystal</option>
+                        <option value="diamond">Diamond</option>
+                        <option value="ruby">Ruby</option>
+                        <option value="sapphire">Sapphire</option>
+                        <option value="emerald">Emerald</option>
+                        <option value="opal">Opal</option>
+                        <option value="amethyst">Amethyst</option>
+                        <option value="topaz">Topaz</option>
+                        <option value="garnet">Garnet</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -305,10 +308,10 @@
         </div>
 
         <div class="info-panel">
-            <div class="info-title">Current Object: Icosahedron</div>
+            <div class="info-title">Current Gem: Brilliant Cut Diamond</div>
             <div id="objectInfo">
-                A polyhedron with 20 identical equilateral triangular faces. 
-                Sacred geometry symbol representing the element of water and divine consciousness.
+                A classic 58-facet brilliant cut diamond with exceptional light performance. 
+                The crown and pavilion angles are optimized for maximum brilliance and fire.
             </div>
             <br>
             <div style="color: #888; font-size: 0.7rem;">
@@ -330,18 +333,18 @@
         let isMouseDown = false;
         let rotationSpeed = { x: 0, y: 0 };
 
-        // Object information
-        const objectInfo = {
-            icosahedron: "A polyhedron with 20 identical equilateral triangular faces. Sacred geometry symbol representing the element of water and divine consciousness.",
-            dodecahedron: "A polyhedron with 12 pentagonal faces. Associated with the universe and cosmic energy in Platonic philosophy.",
-            octahedron: "Eight triangular faces forming a double pyramid. Represents the element of air and mental clarity.",
-            tetrahedron: "Four triangular faces forming a pyramid. The simplest polyhedron, symbolizing fire and manifestation.",
-            torus: "A doughnut-shaped surface of revolution. Represents the flow of energy and the eternal cycle of creation.",
-            torusKnot: "A closed curve that winds around a torus. Symbol of interconnectedness and infinite loops of existence.",
-            sierpinski: "A fractal triangle with infinite recursive patterns. Represents the self-similar nature of reality.",
-            fractal: "A sphere with fractal surface displacement. Demonstrates the infinite complexity within simple forms.",
-            merkaba: "Two interlocking tetrahedra forming a star. Ancient symbol of divine light vehicle and spiritual transformation.",
-            flower: "Multiple intersecting circles forming sacred patterns. The Flower of Life represents creation and universal geometry."
+        // Gemstone information
+        const gemstoneInfo = {
+            brilliant: "A classic 58-facet brilliant cut diamond with exceptional light performance. The crown and pavilion angles are optimized for maximum brilliance and fire.",
+            princess: "A square or rectangular cut with pointed corners and 76 facets. Known for its modern, geometric appeal and excellent light return.",
+            emerald: "A rectangular step-cut with large, open facets that showcase clarity. The cut emphasizes the gem's transparency and color.",
+            oval: "An elegant elongated brilliant cut that creates the illusion of greater size. Features 56-58 facets for excellent light performance.",
+            pear: "A teardrop-shaped cut combining the brilliance of round cuts with the elegance of marquise. Perfect for pendants and earrings.",
+            marquise: "A boat-shaped cut with pointed ends that maximizes carat weight. Creates an elegant, elongated appearance.",
+            cushion: "A square or rectangular cut with rounded corners and large facets. Known for its vintage appeal and excellent color display.",
+            asscher: "A square step-cut with cropped corners, similar to emerald cut but square. Features a high crown and small table.",
+            round: "The classic round brilliant cut with 57-58 facets. Offers the best light performance and is the most popular diamond cut.",
+            heart: "A romantic cut shaped like a heart with 56-58 facets. Requires exceptional skill to cut properly and maximize brilliance."
         };
 
         function init() {
@@ -353,36 +356,52 @@
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = 5;
 
-            // Renderer setup
+            // Renderer setup with enhanced settings for gemstones
             renderer = new THREE.WebGLRenderer({ 
                 canvas: document.getElementById('canvas'),
                 antialias: true,
-                alpha: true
+                alpha: true,
+                powerPreference: "high-performance"
             });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            renderer.outputEncoding = THREE.sRGBEncoding;
 
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+            // Enhanced lighting for gemstones
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
             scene.add(ambientLight);
 
-            const directionalLight = new THREE.DirectionalLight(0x00ff88, 1);
+            // Main directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
             directionalLight.position.set(5, 5, 5);
             directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
             scene.add(directionalLight);
 
-            const pointLight1 = new THREE.PointLight(0xff0088, 0.5);
+            // Multiple colored point lights for gemstone effects
+            const pointLight1 = new THREE.PointLight(0xff0088, 0.8, 10);
             pointLight1.position.set(-5, -5, -5);
             scene.add(pointLight1);
 
-            const pointLight2 = new THREE.PointLight(0x0088ff, 0.5);
+            const pointLight2 = new THREE.PointLight(0x0088ff, 0.8, 10);
             pointLight2.position.set(5, -5, 5);
             scene.add(pointLight2);
 
+            const pointLight3 = new THREE.PointLight(0x88ff00, 0.6, 10);
+            pointLight3.position.set(-5, 5, -5);
+            scene.add(pointLight3);
+
+            const pointLight4 = new THREE.PointLight(0xff8800, 0.6, 10);
+            pointLight4.position.set(5, 5, -5);
+            scene.add(pointLight4);
+
             // Create initial object
-            createObject('icosahedron', 'wireframe');
+            createObject('brilliant', 'diamond');
 
             // Event listeners
             setupEventListeners();
@@ -403,41 +422,41 @@
             let geometry;
             
             switch(type) {
-                case 'icosahedron':
-                    geometry = new THREE.IcosahedronGeometry(2, 1);
+                case 'brilliant':
+                    geometry = createBrilliantCutGeometry();
                     break;
-                case 'dodecahedron':
-                    geometry = new THREE.DodecahedronGeometry(2, 0);
+                case 'princess':
+                    geometry = createPrincessCutGeometry();
                     break;
-                case 'octahedron':
-                    geometry = new THREE.OctahedronGeometry(2, 0);
+                case 'emerald':
+                    geometry = createEmeraldCutGeometry();
                     break;
-                case 'tetrahedron':
-                    geometry = new THREE.TetrahedronGeometry(2, 0);
+                case 'oval':
+                    geometry = createOvalCutGeometry();
                     break;
-                case 'torus':
-                    geometry = new THREE.TorusGeometry(1.5, 0.5, 16, 100);
+                case 'pear':
+                    geometry = createPearCutGeometry();
                     break;
-                case 'torusKnot':
-                    geometry = new THREE.TorusKnotGeometry(1.5, 0.3, 100, 16);
+                case 'marquise':
+                    geometry = createMarquiseCutGeometry();
                     break;
-                case 'sierpinski':
-                    geometry = createSierpinskiGeometry();
+                case 'cushion':
+                    geometry = createCushionCutGeometry();
                     break;
-                case 'fractal':
-                    geometry = createFractalSphere();
+                case 'asscher':
+                    geometry = createAsscherCutGeometry();
                     break;
-                case 'merkaba':
-                    geometry = createMerkabaGeometry();
+                case 'round':
+                    geometry = createRoundCutGeometry();
                     break;
-                case 'flower':
-                    geometry = createFlowerOfLifeGeometry();
+                case 'heart':
+                    geometry = createHeartCutGeometry();
                     break;
                 default:
-                    geometry = new THREE.IcosahedronGeometry(2, 1);
+                    geometry = createBrilliantCutGeometry();
             }
 
-            const material = createMaterial(materialType);
+            const material = createGemstoneMaterial(materialType);
             currentObject = new THREE.Mesh(geometry, material);
             currentObject.castShadow = true;
             currentObject.receiveShadow = true;
@@ -445,90 +464,158 @@
             scene.add(currentObject);
 
             // Update info panel
-            updateInfoPanel(type);
+            updateInfoPanel(type, materialType);
         }
 
-        function createMaterial(type) {
+        function createGemstoneMaterial(type) {
             switch(type) {
-                case 'wireframe':
-                    return new THREE.MeshBasicMaterial({ 
-                        color: 0x00ff88, 
-                        wireframe: true,
-                        linewidth: 2
-                    });
-                case 'solid':
-                    return new THREE.MeshPhongMaterial({ 
-                        color: 0x00ff88,
-                        shininess: 100,
-                        specular: 0x111111
-                    });
-                case 'glass':
+                case 'diamond':
                     return new THREE.MeshPhysicalMaterial({ 
-                        color: 0x88ffff,
-                        transparent: true,
-                        opacity: 0.6,
-                        roughness: 0,
+                        color: 0xffffff,
                         metalness: 0,
-                        transmission: 0.9,
-                        thickness: 0.5
+                        roughness: 0,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0,
+                        transmission: 0.95,
+                        thickness: 0.5,
+                        ior: 2.42,
+                        attenuationDistance: 0.5,
+                        attenuationColor: 0xffffff
                     });
-                case 'hologram':
-                    return new THREE.MeshBasicMaterial({ 
-                        color: 0x00ffff,
-                        transparent: true,
-                        opacity: 0.7,
-                        side: THREE.DoubleSide
-                    });
-                case 'crystal':
+                case 'ruby':
                     return new THREE.MeshPhysicalMaterial({ 
-                        color: 0xff88ff,
-                        metalness: 0.2,
+                        color: 0xff0000,
+                        metalness: 0,
                         roughness: 0.1,
                         clearcoat: 1.0,
-                        clearcoatRoughness: 0.1
+                        clearcoatRoughness: 0.1,
+                        transmission: 0.8,
+                        thickness: 0.5,
+                        ior: 1.77,
+                        attenuationDistance: 0.3,
+                        attenuationColor: 0xff0000
+                    });
+                case 'sapphire':
+                    return new THREE.MeshPhysicalMaterial({ 
+                        color: 0x0000ff,
+                        metalness: 0,
+                        roughness: 0.1,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0.1,
+                        transmission: 0.8,
+                        thickness: 0.5,
+                        ior: 1.77,
+                        attenuationDistance: 0.3,
+                        attenuationColor: 0x0000ff
+                    });
+                case 'emerald':
+                    return new THREE.MeshPhysicalMaterial({ 
+                        color: 0x00ff00,
+                        metalness: 0,
+                        roughness: 0.15,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0.1,
+                        transmission: 0.7,
+                        thickness: 0.5,
+                        ior: 1.58,
+                        attenuationDistance: 0.4,
+                        attenuationColor: 0x00ff00
+                    });
+                case 'opal':
+                    return new THREE.MeshPhysicalMaterial({ 
+                        color: 0xff69b4,
+                        metalness: 0.1,
+                        roughness: 0.2,
+                        clearcoat: 0.8,
+                        clearcoatRoughness: 0.2,
+                        transmission: 0.6,
+                        thickness: 0.5,
+                        ior: 1.45,
+                        attenuationDistance: 0.6,
+                        attenuationColor: 0xff69b4
+                    });
+                case 'amethyst':
+                    return new THREE.MeshPhysicalMaterial({ 
+                        color: 0x9932cc,
+                        metalness: 0,
+                        roughness: 0.1,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0.1,
+                        transmission: 0.8,
+                        thickness: 0.5,
+                        ior: 1.54,
+                        attenuationDistance: 0.3,
+                        attenuationColor: 0x9932cc
+                    });
+                case 'topaz':
+                    return new THREE.MeshPhysicalMaterial({ 
+                        color: 0x00bfff,
+                        metalness: 0,
+                        roughness: 0.1,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0.1,
+                        transmission: 0.8,
+                        thickness: 0.5,
+                        ior: 1.62,
+                        attenuationDistance: 0.3,
+                        attenuationColor: 0x00bfff
+                    });
+                case 'garnet':
+                    return new THREE.MeshPhysicalMaterial({ 
+                        color: 0x8b0000,
+                        metalness: 0,
+                        roughness: 0.1,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0.1,
+                        transmission: 0.7,
+                        thickness: 0.5,
+                        ior: 1.74,
+                        attenuationDistance: 0.4,
+                        attenuationColor: 0x8b0000
                     });
                 default:
-                    return new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true });
+                    return new THREE.MeshPhysicalMaterial({ 
+                        color: 0xffffff,
+                        metalness: 0,
+                        roughness: 0,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0,
+                        transmission: 0.95,
+                        thickness: 0.5,
+                        ior: 2.42
+                    });
             }
         }
 
-        function createSierpinskiGeometry() {
-            const geometry = new THREE.BufferGeometry();
-            const vertices = [];
-            const indices = [];
-
-            function addTriangle(a, b, c, depth) {
-                if (depth === 0) {
-                    const idx = vertices.length / 3;
-                    vertices.push(...a, ...b, ...c);
-                    indices.push(idx, idx + 1, idx + 2);
+        function createBrilliantCutGeometry() {
+            const geometry = new THREE.OctahedronGeometry(2, 2);
+            const position = geometry.attributes.position;
+            
+            // Create crown facets
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
+                
+                if (y > 0) {
+                    // Crown facets
+                    const length = Math.sqrt(x * x + y * y + z * z);
+                    const factor = (2.2 + Math.sin(x * 10) * 0.1) / length;
+                    position.setXYZ(i, x * factor, y * factor, z * factor);
                 } else {
-                    const ab = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2];
-                    const bc = [(b[0] + c[0]) / 2, (b[1] + c[1]) / 2, (b[2] + c[2]) / 2];
-                    const ca = [(c[0] + a[0]) / 2, (c[1] + a[1]) / 2, (c[2] + a[2]) / 2];
-                    
-                    addTriangle(a, ab, ca, depth - 1);
-                    addTriangle(ab, b, bc, depth - 1);
-                    addTriangle(ca, bc, c, depth - 1);
+                    // Pavilion facets
+                    const length = Math.sqrt(x * x + y * y + z * z);
+                    const factor = (1.8 + Math.sin(x * 8) * 0.1) / length;
+                    position.setXYZ(i, x * factor, y * factor, z * factor);
                 }
             }
-
-            const size = 2;
-            addTriangle(
-                [0, size, 0],
-                [-size, -size, 0],
-                [size, -size, 0],
-                4
-            );
-
-            geometry.setIndex(indices);
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            
             geometry.computeVertexNormals();
             return geometry;
         }
 
-        function createFractalSphere() {
-            const geometry = new THREE.SphereGeometry(2, 64, 32);
+        function createPrincessCutGeometry() {
+            const geometry = new THREE.BoxGeometry(2, 2, 2, 4, 4, 4);
             const position = geometry.attributes.position;
             
             for (let i = 0; i < position.count; i++) {
@@ -536,10 +623,120 @@
                 const y = position.getY(i);
                 const z = position.getZ(i);
                 
-                const noise = Math.sin(x * 5) * Math.cos(y * 5) * Math.sin(z * 5) * 0.1;
-                const length = Math.sqrt(x * x + y * y + z * z);
-                const factor = (2 + noise) / length;
+                if (y > 0) {
+                    // Crown with pointed corners
+                    const factor = 1.2 + Math.sin(x * 5) * Math.cos(z * 5) * 0.1;
+                    position.setXYZ(i, x * factor, y * factor, z * factor);
+                } else {
+                    // Pavilion
+                    const factor = 0.8 + Math.sin(x * 3) * Math.cos(z * 3) * 0.1;
+                    position.setXYZ(i, x * factor, y * factor, z * factor);
+                }
+            }
+            
+            geometry.computeVertexNormals();
+            return geometry;
+        }
+
+        function createEmeraldCutGeometry() {
+            const geometry = new THREE.BoxGeometry(2.5, 2, 1.5, 6, 4, 3);
+            const position = geometry.attributes.position;
+            
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
                 
+                if (y > 0) {
+                    // Step-cut crown
+                    const factor = 1.1 + Math.floor(Math.abs(x) * 2) * 0.05;
+                    position.setXYZ(i, x * factor, y * factor, z * factor);
+                } else {
+                    // Step-cut pavilion
+                    const factor = 0.9 + Math.floor(Math.abs(x) * 2) * 0.05;
+                    position.setXYZ(i, x * factor, y * factor, z * factor);
+                }
+            }
+            
+            geometry.computeVertexNormals();
+            return geometry;
+        }
+
+        function createOvalCutGeometry() {
+            const geometry = new THREE.SphereGeometry(2, 32, 16);
+            const position = geometry.attributes.position;
+            
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
+                
+                // Stretch in X direction to create oval
+                const stretchX = 1.5;
+                const length = Math.sqrt((x * stretchX) * (x * stretchX) + y * y + z * z);
+                const factor = (2 + Math.sin(x * 8) * 0.1) / length;
+                position.setXYZ(i, x * stretchX * factor, y * factor, z * factor);
+            }
+            
+            geometry.computeVertexNormals();
+            return geometry;
+        }
+
+        function createPearCutGeometry() {
+            const geometry = new THREE.SphereGeometry(2, 32, 16);
+            const position = geometry.attributes.position;
+            
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
+                
+                // Create teardrop shape
+                const stretchX = 1.3;
+                const stretchY = 1.8;
+                const length = Math.sqrt((x * stretchX) * (x * stretchX) + (y * stretchY) * (y * stretchY) + z * z);
+                const factor = (2 + Math.sin(x * 6) * 0.1) / length;
+                position.setXYZ(i, x * stretchX * factor, y * stretchY * factor, z * factor);
+            }
+            
+            geometry.computeVertexNormals();
+            return geometry;
+        }
+
+        function createMarquiseCutGeometry() {
+            const geometry = new THREE.SphereGeometry(2, 32, 16);
+            const position = geometry.attributes.position;
+            
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
+                
+                // Create boat shape
+                const stretchX = 2.2;
+                const stretchY = 1.2;
+                const length = Math.sqrt((x * stretchX) * (x * stretchX) + (y * stretchY) * (y * stretchY) + z * z);
+                const factor = (2 + Math.sin(x * 7) * 0.1) / length;
+                position.setXYZ(i, x * stretchX * factor, y * stretchY * factor, z * factor);
+            }
+            
+            geometry.computeVertexNormals();
+            return geometry;
+        }
+
+        function createCushionCutGeometry() {
+            const geometry = new THREE.BoxGeometry(2, 2, 2, 4, 4, 4);
+            const position = geometry.attributes.position;
+            
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
+                
+                // Rounded corners
+                const radius = 0.3;
+                const length = Math.sqrt(x * x + y * y + z * z);
+                const factor = (2 + Math.sin(x * 4) * Math.cos(z * 4) * 0.1) / length;
                 position.setXYZ(i, x * factor, y * factor, z * factor);
             }
             
@@ -547,100 +744,64 @@
             return geometry;
         }
 
-        function createMerkabaGeometry() {
-            const geometry = new THREE.BufferGeometry();
-            const vertices = [];
-            const indices = [];
-
-            // Create two interlocked tetrahedra
-            const size = 2;
-            const height = size * Math.sqrt(2/3);
-
-            // First tetrahedron (pointing up)
-            const tetra1 = [
-                [0, height, 0],
-                [-size, -height/3, size],
-                [size, -height/3, size],
-                [0, -height/3, -size]
-            ];
-
-            // Second tetrahedron (pointing down)
-            const tetra2 = [
-                [0, -height, 0],
-                [-size, height/3, -size],
-                [size, height/3, -size],
-                [0, height/3, size]
-            ];
-
-            function addTetrahedron(verts, offset) {
-                const start = offset;
-                vertices.push(...verts[0], ...verts[1], ...verts[2], ...verts[3]);
+        function createAsscherCutGeometry() {
+            const geometry = new THREE.BoxGeometry(2, 2, 2, 6, 6, 6);
+            const position = geometry.attributes.position;
+            
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
                 
-                // Add faces
-                indices.push(
-                    start, start + 1, start + 2,
-                    start, start + 2, start + 3,
-                    start, start + 3, start + 1,
-                    start + 1, start + 3, start + 2
-                );
+                // High crown with cropped corners
+                if (y > 0) {
+                    const factor = 1.3 + Math.floor(Math.abs(x) * 2) * 0.05;
+                    position.setXYZ(i, x * factor, y * factor, z * factor);
+                } else {
+                    const factor = 0.9 + Math.floor(Math.abs(x) * 2) * 0.05;
+                    position.setXYZ(i, x * factor, y * factor, z * factor);
+                }
             }
-
-            addTetrahedron(tetra1, 0);
-            addTetrahedron(tetra2, 4);
-
-            geometry.setIndex(indices);
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            
             geometry.computeVertexNormals();
             return geometry;
         }
 
-        function createFlowerOfLifeGeometry() {
-            const geometry = new THREE.BufferGeometry();
-            const vertices = [];
-            const indices = [];
-
-            const radius = 0.5;
-            const segments = 32;
-            const rings = 3;
-
-            function addCircle(centerX, centerY, centerZ, startIdx) {
-                for (let i = 0; i <= segments; i++) {
-                    const theta = (i / segments) * Math.PI * 2;
-                    const x = centerX + Math.cos(theta) * radius;
-                    const y = centerY + Math.sin(theta) * radius;
-                    vertices.push(x, y, centerZ);
-
-                    if (i < segments) {
-                        indices.push(startIdx + i, startIdx + i + 1, startIdx + segments + 1);
-                    }
-                }
-                vertices.push(centerX, centerY, centerZ); // Center vertex
+        function createRoundCutGeometry() {
+            const geometry = new THREE.SphereGeometry(2, 32, 16);
+            const position = geometry.attributes.position;
+            
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
                 
-                for (let i = 0; i < segments; i++) {
-                    indices.push(startIdx + segments + 1, startIdx + i, startIdx + (i + 1) % segments);
-                }
+                const length = Math.sqrt(x * x + y * y + z * z);
+                const factor = (2 + Math.sin(x * 8) * Math.cos(y * 8) * 0.1) / length;
+                position.setXYZ(i, x * factor, y * factor, z * factor);
             }
+            
+            geometry.computeVertexNormals();
+            return geometry;
+        }
 
-            // Center circle
-            addCircle(0, 0, 0, 0);
-            let vertexCount = segments + 2;
-
-            // Surrounding circles
-            for (let ring = 1; ring <= rings; ring++) {
-                const circleCount = ring * 6;
-                const ringRadius = ring * radius * Math.sqrt(3);
+        function createHeartCutGeometry() {
+            const geometry = new THREE.SphereGeometry(2, 32, 16);
+            const position = geometry.attributes.position;
+            
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
                 
-                for (let i = 0; i < circleCount; i++) {
-                    const angle = (i / circleCount) * Math.PI * 2;
-                    const x = Math.cos(angle) * ringRadius;
-                    const y = Math.sin(angle) * ringRadius;
-                    addCircle(x, y, Math.sin(ring) * 0.2, vertexCount);
-                    vertexCount += segments + 2;
-                }
+                // Create heart shape
+                const heartX = x * (1 + Math.abs(y) * 0.3);
+                const heartY = y * (1.2 + Math.abs(x) * 0.2);
+                const length = Math.sqrt(heartX * heartX + heartY * heartY + z * z);
+                const factor = (2 + Math.sin(x * 6) * 0.1) / length;
+                position.setXYZ(i, heartX * factor, heartY * factor, z * factor);
             }
-
-            geometry.setIndex(indices);
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            
             geometry.computeVertexNormals();
             return geometry;
         }
@@ -774,12 +935,15 @@
             });
         }
 
-        function updateInfoPanel(objectType) {
+        function updateInfoPanel(objectType, materialType) {
             const titleElement = document.querySelector('.info-title');
             const infoElement = document.getElementById('objectInfo');
             
-            titleElement.textContent = `Current Object: ${objectType.charAt(0).toUpperCase() + objectType.slice(1)}`;
-            infoElement.textContent = objectInfo[objectType] || "A mysterious geometric form from the depths of mathematical space.";
+            const cutName = objectType.charAt(0).toUpperCase() + objectType.slice(1);
+            const gemName = materialType.charAt(0).toUpperCase() + materialType.slice(1);
+            
+            titleElement.textContent = `Current Gem: ${cutName} ${gemName}`;
+            infoElement.textContent = gemstoneInfo[objectType] || "A beautiful gemstone cut with exceptional light performance.";
         }
 
         function animate() {
