@@ -1,0 +1,63 @@
+name: Deploy CDK Stack
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# GitHub OIDCを使用するための権限設定
+permissions:
+  id-token: write   # OIDC トークンの書き込み権限
+  contents: read    # リポジトリの読み取り権限
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # リポジトリをチェックアウト
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    # Node.js セットアップ（CDK CLI用）
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    # Python セットアップ
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    # AWS認証情報の設定（GitHub OIDC使用）
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    
+    # AWS CDK CLIのインストール
+    - name: Install AWS CDK
+      run: npm install -g aws-cdk
+    
+    # Python依存関係のインストール
+    - name: Install dependencies
+      working-directory: ./cloudfront-demo
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    # CDK diff（PRの場合）
+    - name: CDK diff
+      if: github.event_name == 'pull_request'
+      working-directory: ./cloudfront-demo
+      run: cdk diff
+    
+    # CDK deploy（mainブランチの場合）
+    - name: CDK deploy
+      if: github.ref == 'refs/heads/main'
+      working-directory: ./cloudfront-demo
+      run: cdk deploy --require-approval never 
