@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudFront デモサイト</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            margin: 0 0 20px 0;
+            font-size: 3rem;
+            font-weight: 300;
+        }
+        .emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .tech-stack {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .tech-item {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">🚀</div>
+        <h1>CloudFront デプロイ成功！</h1>
+        <p class="success">✅ AWS CDK でのデプロイメントが完了しました</p>
+        <p>このサイトは Amazon CloudFront 経由で配信されています</p>
+        <p>🌏 世界中のエッジロケーションから高速配信</p>
+        
+        <div class="tech-stack">
+            <div class="tech-item">🐍 Python CDK</div>
+            <div class="tech-item">☁️ CloudFront</div>
+            <div class="tech-item">🪣 S3</div>
+            <div class="tech-item">⚡ Edge Delivery</div>
+        </div>
+        
+        <p style="margin-top: 30px; font-size: 0.9rem; opacity: 0.7;">
+            作成日時: <span id="timestamp"></span>
+        </p>
+    </div>
+    
+    <script>
+        // 現在の日時を表示（日本語形式）
+        document.getElementById('timestamp').textContent = 
+            new Date().toLocaleString('ja-JP', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+    </script>
+</body>
+</html> 
