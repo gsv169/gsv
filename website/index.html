@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lee Kuan Yew - Singapore's Founding Father</title>
+    <title>Esoteric Geometric Object Viewer</title>
     <style>
-        /* リセットとベーススタイル */
         * {
             margin: 0;
             padding: 0;
@@ -13,695 +12,801 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* スムーズスクロール */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* ナビゲーション */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 1rem 0;
-            transition: all 0.3s ease;
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: #dc3545;
-        }
-
-        /* ヒーローセクション */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(135deg, #dc3545, #fff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
+            color: #fff;
             overflow: hidden;
+            height: 100vh;
+            touch-action: pan-x pan-y;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
+        #container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+
+        #canvas:active {
+            cursor: grabbing;
+        }
+
+        .ui-overlay {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>') repeat;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .hero-content {
-            z-index: 2;
-            max-width: 800px;
-            padding: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            color: white;
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards;
-        }
-
-        .hero .subtitle {
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.3s forwards;
-        }
-
-        .hero .dates {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.8);
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.6s forwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* セクション共通スタイル */
-        .section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: #dc3545;
-        }
-
-        /* 伝記セクション */
-        .biography {
-            background: #f8f9fa;
-        }
-
-        .bio-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .bio-image {
-            width: 100%;
-            height: 400px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .bio-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        .bio-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-
-        /* タイムライン */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 4px;
-            height: 100%;
-            background: #dc3545;
-            transform: translateX(-50%);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin: 2rem 0;
-            opacity: 0;
-            animation: slideIn 0.6s ease forwards;
-        }
-
-        .timeline-item:nth-child(odd) {
-            padding-right: 50%;
-            text-align: right;
-            animation-delay: 0.1s;
-        }
-
-        .timeline-item:nth-child(even) {
-            padding-left: 50%;
-            text-align: left;
-            animation-delay: 0.2s;
-        }
-
-        .timeline-content {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-left: 4px solid #dc3545;
-            transition: transform 0.3s ease;
-        }
-
-        .timeline-content:hover {
-            transform: translateY(-5px);
-        }
-
-        .timeline-year {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #dc3545;
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-event {
-            font-size: 1rem;
-            color: #666;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 統計インフォグラフィック */
-        .statistics {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            color: white;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #dc3545;
-            display: block;
-            margin-bottom: 1rem;
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* 円グラフアニメーション */
-        .circular-progress {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: conic-gradient(#dc3545 0deg, #dc3545 252deg, rgba(255,255,255,0.2) 252deg);
-            margin: 0 auto 1rem;
+            padding: 10px 20px;
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            justify-content: center;
-            position: relative;
+            justify-content: space-between;
+            gap: 10px;
         }
 
-        .circular-progress::before {
-            content: '';
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #2c3e50;
-            position: absolute;
-        }
-
-        .progress-text {
-            position: relative;
-            z-index: 1;
+        .title {
             font-size: 1.2rem;
             font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
         }
 
-        /* アチーブメントセクション */
-        .achievements {
-            background: #f8f9fa;
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
         }
 
-        .achievement-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .achievement-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .control-label {
+            font-size: 0.8rem;
+            color: #aaa;
+            min-width: 60px;
         }
 
-        .achievement-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        select, button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #00ff88;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .achievement-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, #dc3545, #e74c3c);
+        select:hover, button:hover {
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        select:focus, button:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+        }
+
+        .zoom-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .zoom-btn {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid #00ff88;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
         }
 
-        .achievement-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: #2c3e50;
+        .zoom-btn:hover {
+            background: rgba(0, 255, 136, 0.4);
+            transform: scale(1.1);
         }
 
-        .achievement-desc {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* フッター */
-        footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* レスポンシブデザイン */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero .subtitle {
-                font-size: 1.2rem;
-            }
-
-            .bio-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .timeline::before {
-                left: 20px;
-            }
-
-            .timeline-item {
-                padding-left: 50px !important;
-                padding-right: 0 !important;
-                text-align: left !important;
-            }
-
-            .timeline-item::before {
-                left: 20px !important;
-            }
-
-            nav ul {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .section {
-                padding: 3rem 1rem;
-            }
-        }
-
-        /* スクロールインジケーター */
-        .scroll-indicator {
+        .info-panel {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(220, 53, 69, 0.2);
-            z-index: 1001;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #00ff88;
+            max-width: 250px;
+            font-size: 0.8rem;
+            line-height: 1.4;
         }
 
-        .scroll-progress {
-            height: 100%;
-            background: #dc3545;
-            width: 0%;
-            transition: width 0.1s ease;
+        .info-title {
+            color: #00ff88;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 255, 136, 0.3);
+            border-top: 3px solid #00ff88;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #00ff88;
+            font-size: 1rem;
+        }
+
+        /* Mobile-first responsive design */
+        @media (max-width: 768px) {
+            .ui-overlay {
+                padding: 5px 10px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .title {
+                font-size: 1rem;
+                text-align: center;
+            }
+
+            .controls {
+                justify-content: center;
+                gap: 5px;
+            }
+
+            .control-group {
+                flex-direction: column;
+                align-items: center;
+                min-width: 80px;
+            }
+
+            .control-label {
+                font-size: 0.7rem;
+                min-width: auto;
+                text-align: center;
+            }
+
+            select, button {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+                min-width: 70px;
+            }
+
+            .zoom-controls {
+                bottom: 100px;
+                right: 10px;
+            }
+
+            .zoom-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+
+            .info-panel {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .controls {
+                gap: 3px;
+            }
+
+            .control-group {
+                min-width: 70px;
+            }
+
+            select, button {
+                padding: 6px 8px;
+                font-size: 0.8rem;
+                min-width: 60px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- スクロールインジケーター -->
-    <div class="scroll-indicator">
-        <div class="scroll-progress" id="scrollProgress"></div>
+    <div id="container">
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading 3D Engine...</div>
+        </div>
+
+        <div class="ui-overlay">
+            <div class="title">⧬ Esoteric Geometry Viewer ⧬</div>
+            <div class="controls">
+                <div class="control-group">
+                    <label class="control-label">Object:</label>
+                    <select id="objectSelect">
+                        <option value="icosahedron">Icosahedron</option>
+                        <option value="dodecahedron">Dodecahedron</option>
+                        <option value="octahedron">Octahedron</option>
+                        <option value="tetrahedron">Tetrahedron</option>
+                        <option value="torus">Torus</option>
+                        <option value="torusKnot">Torus Knot</option>
+                        <option value="sierpinski">Sierpinski</option>
+                        <option value="fractal">Fractal Sphere</option>
+                        <option value="merkaba">Merkaba</option>
+                        <option value="flower">Flower of Life</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Material:</label>
+                    <select id="materialSelect">
+                        <option value="wireframe">Wireframe</option>
+                        <option value="solid">Solid</option>
+                        <option value="glass">Glass</option>
+                        <option value="hologram">Hologram</option>
+                        <option value="crystal">Crystal</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Animation:</label>
+                    <button id="animateBtn">▶ Play</button>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Reset:</label>
+                    <button id="resetBtn">↻ Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="zoomIn">+</button>
+            <button class="zoom-btn" id="zoomOut">−</button>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-title">Current Object: Icosahedron</div>
+            <div id="objectInfo">
+                A polyhedron with 20 identical equilateral triangular faces. 
+                Sacred geometry symbol representing the element of water and divine consciousness.
+            </div>
+            <br>
+            <div style="color: #888; font-size: 0.7rem;">
+                🖱️ Click + drag to rotate<br>
+                📱 Touch + drag to rotate<br>
+                🔍 Scroll/pinch to zoom
+            </div>
+        </div>
+
+        <canvas id="canvas"></canvas>
     </div>
 
-    <!-- ナビゲーション -->
-    <nav>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#biography">Biography</a></li>
-            <li><a href="#timeline">Timeline</a></li>
-            <li><a href="#achievements">Achievements</a></li>
-            <li><a href="#statistics">Impact</a></li>
-        </ul>
-    </nav>
-
-    <!-- ヒーローセクション -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Lee Kuan Yew</h1>
-            <p class="subtitle">Singapore's Founding Father</p>
-            <p class="dates">1923 - 2015</p>
-        </div>
-    </section>
-
-    <!-- 伝記セクション -->
-    <section id="biography" class="section biography">
-        <h2 class="section-title">Biography</h2>
-        <div class="bio-grid">
-            <div class="bio-image">
-                <img src="lee_kuan_yew_1975.jpg" alt="Lee Kuan Yew portrait from 1975">
-            </div>
-            <div class="bio-text">
-                <p>Lee Kuan Yew was a Singaporean statesman and lawyer who served as the first Prime Minister of Singapore from 1959 to 1990. He is widely recognized as the founding father of modern Singapore.</p>
-                
-                <p>Born into a middle-class family during the British colonial era, Lee was educated at Raffles Institution and later at the University of Cambridge, where he studied law. Upon returning to Singapore, he became involved in politics and co-founded the People's Action Party (PAP) in 1954.</p>
-
-                <p>Under his leadership, Singapore transformed from a developing country to a developed nation within a single generation, achieving remarkable economic growth and social stability. His pragmatic approach to governance and emphasis on meritocracy, multiracialism, and economic development became known as the "Singapore Model."</p>
-
-                <p>Lee Kuan Yew's legacy continues to influence Singapore's policies and governance philosophy today, making him one of the most influential political figures in Southeast Asian history.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- タイムラインセクション -->
-    <section id="timeline" class="section">
-        <h2 class="section-title">Life Timeline</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1923</div>
-                    <div class="timeline-event">Born in Singapore during British colonial rule</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1946</div>
-                    <div class="timeline-event">Graduated from Cambridge University with First Class Honours in Law</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1954</div>
-                    <div class="timeline-event">Co-founded the People's Action Party (PAP)</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1959</div>
-                    <div class="timeline-event">Became Singapore's first Prime Minister</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1963</div>
-                    <div class="timeline-event">Led Singapore into the Federation of Malaysia</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1965</div>
-                    <div class="timeline-event">Singapore gained independence from Malaysia</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">1990</div>
-                    <div class="timeline-event">Stepped down as Prime Minister after 31 years</div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-year">2015</div>
-                    <div class="timeline-event">Passed away at age 91, leaving behind a transformed nation</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 統計セクション -->
-    <section id="statistics" class="section statistics">
-        <h2 class="section-title">Singapore's Transformation Under Lee Kuan Yew</h2>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="circular-progress">
-                    <span class="progress-text">70%</span>
-                </div>
-                <span class="stat-label">GDP Growth Rate<br>During His Tenure</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">$400</span>
-                <span class="stat-label">GDP per capita in 1965<br>(at independence)</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">$15,000</span>
-                <span class="stat-label">GDP per capita in 1990<br>(when he stepped down)</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">31</span>
-                <span class="stat-label">Years as<br>Prime Minister</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">99%</span>
-                <span class="stat-label">Literacy Rate<br>Achieved</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">2.1M</span>
-                <span class="stat-label">Population in 1965<br>to 3M in 1990</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- アチーブメントセクション -->
-    <section id="achievements" class="section achievements">
-        <h2 class="section-title">Key Achievements</h2>
-        <div class="achievement-grid">
-            <div class="achievement-card">
-                <div class="achievement-icon">🏛️</div>
-                <div class="achievement-title">Political Stability</div>
-                <div class="achievement-desc">Established a stable multi-party democracy with strong institutions and rule of law that continues to govern Singapore effectively.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">💼</div>
-                <div class="achievement-title">Economic Miracle</div>
-                <div class="achievement-desc">Transformed Singapore from a third-world country to a first-world nation in just one generation through strategic economic policies.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">🌐</div>
-                <div class="achievement-title">Multiracial Harmony</div>
-                <div class="achievement-desc">Built a harmonious multiracial society where Chinese, Malay, Indian, and other ethnic groups coexist peacefully.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">🎓</div>
-                <div class="achievement-title">Education System</div>
-                <div class="achievement-desc">Developed one of the world's best education systems, emphasizing meritocracy and bilingual education.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">🏠</div>
-                <div class="achievement-title">Public Housing</div>
-                <div class="achievement-desc">Created a comprehensive public housing program that houses over 80% of Singapore's population in high-quality apartments.</div>
-            </div>
-            <div class="achievement-card">
-                <div class="achievement-icon">🌿</div>
-                <div class="achievement-title">Garden City</div>
-                <div class="achievement-desc">Transformed Singapore into a "Garden City" with extensive urban planning and environmental conservation efforts.</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- フッター -->
-    <footer>
-        <div class="footer-content">
-            <h3>Lee Kuan Yew</h3>
-            <p>"I have never been overconcerned or obsessed with opinion polls or popularity polls. I think a leader who is, is a weak leader."</p>
-            <p style="margin-top: 2rem; opacity: 0.7;">&copy; 2024 Biography Website. Educational Purpose Only.</p>
-        </div>
-    </footer>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // スクロールプログレスバー
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const maxHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = (scrolled / maxHeight) * 100;
-            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
-        });
+        // Three.js setup
+        let scene, camera, renderer, currentObject, animationId;
+        let isAnimating = false;
+        let mouse = { x: 0, y: 0 };
+        let isMouseDown = false;
+        let rotationSpeed = { x: 0, y: 0 };
 
-        // タイムラインアニメーション（スクロールに応じて表示）
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+        // Object information
+        const objectInfo = {
+            icosahedron: "A polyhedron with 20 identical equilateral triangular faces. Sacred geometry symbol representing the element of water and divine consciousness.",
+            dodecahedron: "A polyhedron with 12 pentagonal faces. Associated with the universe and cosmic energy in Platonic philosophy.",
+            octahedron: "Eight triangular faces forming a double pyramid. Represents the element of air and mental clarity.",
+            tetrahedron: "Four triangular faces forming a pyramid. The simplest polyhedron, symbolizing fire and manifestation.",
+            torus: "A doughnut-shaped surface of revolution. Represents the flow of energy and the eternal cycle of creation.",
+            torusKnot: "A closed curve that winds around a torus. Symbol of interconnectedness and infinite loops of existence.",
+            sierpinski: "A fractal triangle with infinite recursive patterns. Represents the self-similar nature of reality.",
+            fractal: "A sphere with fractal surface displacement. Demonstrates the infinite complexity within simple forms.",
+            merkaba: "Two interlocking tetrahedra forming a star. Ancient symbol of divine light vehicle and spiritual transformation.",
+            flower: "Multiple intersecting circles forming sacred patterns. The Flower of Life represents creation and universal geometry."
         };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
-                }
-            });
-        }, observerOptions);
+        function init() {
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0a);
 
-        // 全てのタイムラインアイテムを監視
-        document.querySelectorAll('.timeline-item').forEach(item => {
-            item.style.animationPlayState = 'paused';
-            observer.observe(item);
-        });
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
 
-        // 統計カードのホバーエフェクト強化
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-10px) scale(1.02)';
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('canvas'),
+                antialias: true,
+                alpha: true
             });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0x00ff88, 1);
+            directionalLight.position.set(5, 5, 5);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+
+            const pointLight1 = new THREE.PointLight(0xff0088, 0.5);
+            pointLight1.position.set(-5, -5, -5);
+            scene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0x0088ff, 0.5);
+            pointLight2.position.set(5, -5, 5);
+            scene.add(pointLight2);
+
+            // Create initial object
+            createObject('icosahedron', 'wireframe');
+
+            // Event listeners
+            setupEventListeners();
+
+            // Start render loop
+            animate();
+
+            // Hide loading screen
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function createObject(type, materialType) {
+            // Remove existing object
+            if (currentObject) {
+                scene.remove(currentObject);
+            }
+
+            let geometry;
             
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0) scale(1)';
-            });
-        });
+            switch(type) {
+                case 'icosahedron':
+                    geometry = new THREE.IcosahedronGeometry(2, 1);
+                    break;
+                case 'dodecahedron':
+                    geometry = new THREE.DodecahedronGeometry(2, 0);
+                    break;
+                case 'octahedron':
+                    geometry = new THREE.OctahedronGeometry(2, 0);
+                    break;
+                case 'tetrahedron':
+                    geometry = new THREE.TetrahedronGeometry(2, 0);
+                    break;
+                case 'torus':
+                    geometry = new THREE.TorusGeometry(1.5, 0.5, 16, 100);
+                    break;
+                case 'torusKnot':
+                    geometry = new THREE.TorusKnotGeometry(1.5, 0.3, 100, 16);
+                    break;
+                case 'sierpinski':
+                    geometry = createSierpinskiGeometry();
+                    break;
+                case 'fractal':
+                    geometry = createFractalSphere();
+                    break;
+                case 'merkaba':
+                    geometry = createMerkabaGeometry();
+                    break;
+                case 'flower':
+                    geometry = createFlowerOfLifeGeometry();
+                    break;
+                default:
+                    geometry = new THREE.IcosahedronGeometry(2, 1);
+            }
 
-        // スムーズナビゲーション
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = document.querySelector(link.getAttribute('href'));
-                const navHeight = document.querySelector('nav').offsetHeight;
-                const targetPosition = target.offsetTop - navHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // 数字カウントアップアニメーション
-        function animateCountUp(element, target, duration = 2000) {
-            let start = 0;
-            const increment = target / (duration / 16);
+            const material = createMaterial(materialType);
+            currentObject = new THREE.Mesh(geometry, material);
+            currentObject.castShadow = true;
+            currentObject.receiveShadow = true;
             
-            function updateCount() {
-                start += increment;
-                if (start < target) {
-                    element.textContent = Math.floor(start);
-                    requestAnimationFrame(updateCount);
+            scene.add(currentObject);
+
+            // Update info panel
+            updateInfoPanel(type);
+        }
+
+        function createMaterial(type) {
+            switch(type) {
+                case 'wireframe':
+                    return new THREE.MeshBasicMaterial({ 
+                        color: 0x00ff88, 
+                        wireframe: true,
+                        linewidth: 2
+                    });
+                case 'solid':
+                    return new THREE.MeshPhongMaterial({ 
+                        color: 0x00ff88,
+                        shininess: 100,
+                        specular: 0x111111
+                    });
+                case 'glass':
+                    return new THREE.MeshPhysicalMaterial({ 
+                        color: 0x88ffff,
+                        transparent: true,
+                        opacity: 0.6,
+                        roughness: 0,
+                        metalness: 0,
+                        transmission: 0.9,
+                        thickness: 0.5
+                    });
+                case 'hologram':
+                    return new THREE.MeshBasicMaterial({ 
+                        color: 0x00ffff,
+                        transparent: true,
+                        opacity: 0.7,
+                        side: THREE.DoubleSide
+                    });
+                case 'crystal':
+                    return new THREE.MeshPhysicalMaterial({ 
+                        color: 0xff88ff,
+                        metalness: 0.2,
+                        roughness: 0.1,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0.1
+                    });
+                default:
+                    return new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true });
+            }
+        }
+
+        function createSierpinskiGeometry() {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const indices = [];
+
+            function addTriangle(a, b, c, depth) {
+                if (depth === 0) {
+                    const idx = vertices.length / 3;
+                    vertices.push(...a, ...b, ...c);
+                    indices.push(idx, idx + 1, idx + 2);
                 } else {
-                    element.textContent = target;
+                    const ab = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2];
+                    const bc = [(b[0] + c[0]) / 2, (b[1] + c[1]) / 2, (b[2] + c[2]) / 2];
+                    const ca = [(c[0] + a[0]) / 2, (c[1] + a[1]) / 2, (c[2] + a[2]) / 2];
+                    
+                    addTriangle(a, ab, ca, depth - 1);
+                    addTriangle(ab, b, bc, depth - 1);
+                    addTriangle(ca, bc, c, depth - 1);
                 }
             }
-            updateCount();
+
+            const size = 2;
+            addTriangle(
+                [0, size, 0],
+                [-size, -size, 0],
+                [size, -size, 0],
+                4
+            );
+
+            geometry.setIndex(indices);
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.computeVertexNormals();
+            return geometry;
         }
 
-        // 統計セクションが表示されたときにアニメーション開始
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // 数字のカウントアップアニメーション
-                    const statNumbers = entry.target.querySelectorAll('.stat-number');
-                    statNumbers.forEach(stat => {
-                        const text = stat.textContent;
-                        const number = parseInt(text.replace(/[^0-9]/g, ''));
-                        if (number) {
-                            stat.textContent = '0';
-                            setTimeout(() => animateCountUp(stat, number), 500);
-                        }
-                    });
-                    
-                    statsObserver.unobserve(entry.target);
+        function createFractalSphere() {
+            const geometry = new THREE.SphereGeometry(2, 64, 32);
+            const position = geometry.attributes.position;
+            
+            for (let i = 0; i < position.count; i++) {
+                const x = position.getX(i);
+                const y = position.getY(i);
+                const z = position.getZ(i);
+                
+                const noise = Math.sin(x * 5) * Math.cos(y * 5) * Math.sin(z * 5) * 0.1;
+                const length = Math.sqrt(x * x + y * y + z * z);
+                const factor = (2 + noise) / length;
+                
+                position.setXYZ(i, x * factor, y * factor, z * factor);
+            }
+            
+            geometry.computeVertexNormals();
+            return geometry;
+        }
+
+        function createMerkabaGeometry() {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const indices = [];
+
+            // Create two interlocked tetrahedra
+            const size = 2;
+            const height = size * Math.sqrt(2/3);
+
+            // First tetrahedron (pointing up)
+            const tetra1 = [
+                [0, height, 0],
+                [-size, -height/3, size],
+                [size, -height/3, size],
+                [0, -height/3, -size]
+            ];
+
+            // Second tetrahedron (pointing down)
+            const tetra2 = [
+                [0, -height, 0],
+                [-size, height/3, -size],
+                [size, height/3, -size],
+                [0, height/3, size]
+            ];
+
+            function addTetrahedron(verts, offset) {
+                const start = offset;
+                vertices.push(...verts[0], ...verts[1], ...verts[2], ...verts[3]);
+                
+                // Add faces
+                indices.push(
+                    start, start + 1, start + 2,
+                    start, start + 2, start + 3,
+                    start, start + 3, start + 1,
+                    start + 1, start + 3, start + 2
+                );
+            }
+
+            addTetrahedron(tetra1, 0);
+            addTetrahedron(tetra2, 4);
+
+            geometry.setIndex(indices);
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.computeVertexNormals();
+            return geometry;
+        }
+
+        function createFlowerOfLifeGeometry() {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const indices = [];
+
+            const radius = 0.5;
+            const segments = 32;
+            const rings = 3;
+
+            function addCircle(centerX, centerY, centerZ, startIdx) {
+                for (let i = 0; i <= segments; i++) {
+                    const theta = (i / segments) * Math.PI * 2;
+                    const x = centerX + Math.cos(theta) * radius;
+                    const y = centerY + Math.sin(theta) * radius;
+                    vertices.push(x, y, centerZ);
+
+                    if (i < segments) {
+                        indices.push(startIdx + i, startIdx + i + 1, startIdx + segments + 1);
+                    }
+                }
+                vertices.push(centerX, centerY, centerZ); // Center vertex
+                
+                for (let i = 0; i < segments; i++) {
+                    indices.push(startIdx + segments + 1, startIdx + i, startIdx + (i + 1) % segments);
+                }
+            }
+
+            // Center circle
+            addCircle(0, 0, 0, 0);
+            let vertexCount = segments + 2;
+
+            // Surrounding circles
+            for (let ring = 1; ring <= rings; ring++) {
+                const circleCount = ring * 6;
+                const ringRadius = ring * radius * Math.sqrt(3);
+                
+                for (let i = 0; i < circleCount; i++) {
+                    const angle = (i / circleCount) * Math.PI * 2;
+                    const x = Math.cos(angle) * ringRadius;
+                    const y = Math.sin(angle) * ringRadius;
+                    addCircle(x, y, Math.sin(ring) * 0.2, vertexCount);
+                    vertexCount += segments + 2;
+                }
+            }
+
+            geometry.setIndex(indices);
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.computeVertexNormals();
+            return geometry;
+        }
+
+        function setupEventListeners() {
+            // Object selection
+            document.getElementById('objectSelect').addEventListener('change', (e) => {
+                const materialType = document.getElementById('materialSelect').value;
+                createObject(e.target.value, materialType);
+            });
+
+            // Material selection
+            document.getElementById('materialSelect').addEventListener('change', (e) => {
+                const objectType = document.getElementById('objectSelect').value;
+                createObject(objectType, e.target.value);
+            });
+
+            // Animation toggle
+            document.getElementById('animateBtn').addEventListener('click', () => {
+                isAnimating = !isAnimating;
+                document.getElementById('animateBtn').textContent = isAnimating ? '⏸ Pause' : '▶ Play';
+            });
+
+            // Reset button
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                if (currentObject) {
+                    currentObject.rotation.set(0, 0, 0);
+                    camera.position.set(0, 0, 5);
+                    rotationSpeed = { x: 0, y: 0 };
                 }
             });
-        }, { threshold: 0.3 });
 
-        const statsSection = document.querySelector('.statistics');
-        if (statsSection) {
-            statsObserver.observe(statsSection);
+            // Zoom controls
+            document.getElementById('zoomIn').addEventListener('click', () => {
+                camera.position.multiplyScalar(0.9);
+            });
+
+            document.getElementById('zoomOut').addEventListener('click', () => {
+                camera.position.multiplyScalar(1.1);
+            });
+
+            // Mouse/touch controls
+            const canvas = document.getElementById('canvas');
+
+            // Mouse events
+            canvas.addEventListener('mousedown', (e) => {
+                isMouseDown = true;
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (isMouseDown && currentObject) {
+                    const deltaX = e.clientX - mouse.x;
+                    const deltaY = e.clientY - mouse.y;
+                    
+                    rotationSpeed.x = deltaY * 0.01;
+                    rotationSpeed.y = deltaX * 0.01;
+                    
+                    currentObject.rotation.x += rotationSpeed.x;
+                    currentObject.rotation.y += rotationSpeed.y;
+                    
+                    mouse.x = e.clientX;
+                    mouse.y = e.clientY;
+                }
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                isMouseDown = false;
+            });
+
+            // Touch events
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (e.touches.length === 1) {
+                    isMouseDown = true;
+                    mouse.x = e.touches[0].clientX;
+                    mouse.y = e.touches[0].clientY;
+                }
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (e.touches.length === 1 && isMouseDown && currentObject) {
+                    const deltaX = e.touches[0].clientX - mouse.x;
+                    const deltaY = e.touches[0].clientY - mouse.y;
+                    
+                    rotationSpeed.x = deltaY * 0.01;
+                    rotationSpeed.y = deltaX * 0.01;
+                    
+                    currentObject.rotation.x += rotationSpeed.x;
+                    currentObject.rotation.y += rotationSpeed.y;
+                    
+                    mouse.x = e.touches[0].clientX;
+                    mouse.y = e.touches[0].clientY;
+                } else if (e.touches.length === 2) {
+                    // Pinch to zoom
+                    const touch1 = e.touches[0];
+                    const touch2 = e.touches[1];
+                    const distance = Math.sqrt(
+                        Math.pow(touch2.clientX - touch1.clientX, 2) +
+                        Math.pow(touch2.clientY - touch1.clientY, 2)
+                    );
+                    
+                    if (this.lastDistance) {
+                        const delta = distance - this.lastDistance;
+                        camera.position.multiplyScalar(delta > 0 ? 0.98 : 1.02);
+                    }
+                    this.lastDistance = distance;
+                }
+            });
+
+            canvas.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                isMouseDown = false;
+                this.lastDistance = null;
+            });
+
+            // Wheel zoom
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? 1.1 : 0.9;
+                camera.position.multiplyScalar(delta);
+            });
+
+            // Window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
         }
+
+        function updateInfoPanel(objectType) {
+            const titleElement = document.querySelector('.info-title');
+            const infoElement = document.getElementById('objectInfo');
+            
+            titleElement.textContent = `Current Object: ${objectType.charAt(0).toUpperCase() + objectType.slice(1)}`;
+            infoElement.textContent = objectInfo[objectType] || "A mysterious geometric form from the depths of mathematical space.";
+        }
+
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+
+            if (currentObject) {
+                // Auto-rotation when animation is enabled
+                if (isAnimating) {
+                    currentObject.rotation.x += 0.005;
+                    currentObject.rotation.y += 0.01;
+                    currentObject.rotation.z += 0.003;
+                }
+
+                // Momentum-based rotation when not actively dragging
+                if (!isMouseDown) {
+                    rotationSpeed.x *= 0.95;
+                    rotationSpeed.y *= 0.95;
+                    currentObject.rotation.x += rotationSpeed.x;
+                    currentObject.rotation.y += rotationSpeed.y;
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
