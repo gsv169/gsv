@@ -356,14 +356,12 @@
     <!-- Three.js Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"></script>
     <!-- Post-processing -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/postprocessing/EffectComposer.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/postprocessing/RenderPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/postprocessing/OutputPass.js"></script>
-    <!-- Loaders -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/RGBELoader.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/OutputPass.js"></script>
     <!-- Controls -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 
     <script>
         // Three.js setup
@@ -433,8 +431,8 @@
                 controls.maxDistance = 20;
                 controls.enablePan = false;
 
-                // Load HDRI environment
-                await loadEnvironment();
+                // Load studio environment
+                loadEnvironment();
 
                 // Setup post-processing
                 setupPostProcessing();
@@ -453,9 +451,9 @@
 
             } catch (error) {
                 console.error('Initialization failed:', error);
-                document.querySelector('.loading-text').textContent = 'Loading failed. Using fallback lighting...';
+                document.querySelector('.loading-text').textContent = 'Loading failed. Starting with basic setup...';
                 
-                // Fallback initialization without HDRI
+                // Fallback initialization
                 setupFallbackLighting();
                 setupPostProcessing();
                 createJewelry('brilliant', 'diamond');
@@ -468,61 +466,130 @@
             }
         }
 
-        async function loadEnvironment() {
-            const loader = new THREE.RGBELoader();
+        function createStudioEnvironment() {
+            // Create a high-quality procedural studio environment
+            const size = 1024;
+            const data = new Float32Array(size * size * 4);
             
-            // Create a simple procedural HDRI as fallback
-            const createProceduralHDRI = () => {
-                const size = 512;
-                const data = new Float32Array(size * size * 4);
-                
-                for (let i = 0; i < size; i++) {
-                    for (let j = 0; j < size; j++) {
-                        const index = (i * size + j) * 4;
-                        
-                        // Create gradient with some variation
-                        const u = i / size;
-                        const v = j / size;
-                        
-                        // Studio lighting simulation
-                        const centerDist = Math.sqrt((u - 0.5) ** 2 + (v - 0.5) ** 2);
-                        const intensity = Math.max(0.1, 1.0 - centerDist * 1.5);
-                        
-                        // Add some color variation
-                        const warmth = 0.1 + 0.2 * Math.sin(u * Math.PI * 2);
-                        
-                        data[index] = intensity * (1.0 + warmth);     // R
-                        data[index + 1] = intensity * 1.0;           // G  
-                        data[index + 2] = intensity * (1.0 - warmth * 0.5); // B
-                        data[index + 3] = 1.0;                       // A
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    const index = (i * size + j) * 4;
+                    
+                    // Convert to spherical coordinates
+                    const u = i / size;
+                    const v = j / size;
+                    const theta = u * Math.PI * 2; // 0 to 2π
+                    const phi = v * Math.PI;       // 0 to π
+                    
+                    // Create studio lighting pattern
+                    let intensity = 0.1; // Base ambient
+                    
+                    // Key light (main studio light)
+                    const keyLightDir = { theta: Math.PI * 0.3, phi: Math.PI * 0.4 };
+                    const keyDist = Math.acos(
+                        Math.sin(phi) * Math.sin(keyLightDir.phi) * Math.cos(theta - keyLightDir.theta) +
+                        Math.cos(phi) * Math.cos(keyLightDir.phi)
+                    );
+                    if (keyDist < 0.8) {
+                        intensity += 3.0 * Math.exp(-keyDist * keyDist * 8);
                     }
+                    
+                    // Fill light (softer, opposite side)
+                    const fillLightDir = { theta: Math.PI * 1.7, phi: Math.PI * 0.6 };
+                    const fillDist = Math.acos(
+                        Math.sin(phi) * Math.sin(fillLightDir.phi) * Math.cos(theta - fillLightDir.theta) +
+                        Math.cos(phi) * Math.cos(fillLightDir.phi)
+                    );
+                    if (fillDist < 1.0) {
+                        intensity += 1.5 * Math.exp(-fillDist * fillDist * 3);
+                    }
+                    
+                    // Rim lights (for edge definition)
+                    const rimLight1Dir = { theta: Math.PI * 0.1, phi: Math.PI * 0.5 };
+                    const rim1Dist = Math.acos(
+                        Math.sin(phi) * Math.sin(rimLight1Dir.phi) * Math.cos(theta - rimLight1Dir.theta) +
+                        Math.cos(phi) * Math.cos(rimLight1Dir.phi)
+                    );
+                    if (rim1Dist < 0.6) {
+                        intensity += 2.0 * Math.exp(-rim1Dist * rim1Dist * 12);
+                    }
+                    
+                    const rimLight2Dir = { theta: Math.PI * 1.9, phi: Math.PI * 0.5 };
+                    const rim2Dist = Math.acos(
+                        Math.sin(phi) * Math.sin(rimLight2Dir.phi) * Math.cos(theta - rimLight2Dir.theta) +
+                        Math.cos(phi) * Math.cos(rimLight2Dir.phi)
+                    );
+                    if (rim2Dist < 0.6) {
+                        intensity += 1.8 * Math.exp(-rim2Dist * rim2Dist * 12);
+                    }
+                    
+                    // Ground reflection (subtle)
+                    if (phi > Math.PI * 0.8) {
+                        intensity += 0.3 * (1 - Math.abs(theta - Math.PI) / Math.PI);
+                    }
+                    
+                    // Color temperature variation
+                    const warmth = 0.05 + 0.1 * Math.sin(theta + phi);
+                    const coolness = 0.05 + 0.08 * Math.cos(theta * 2);
+                    
+                    // Apply color and intensity
+                    data[index] = intensity * (1.0 + warmth);           // R (warm)
+                    data[index + 1] = intensity * 1.0;                  // G (neutral)
+                    data[index + 2] = intensity * (1.0 + coolness);     // B (cool)
+                    data[index + 3] = 1.0;                              // A
                 }
-                
-                const texture = new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.FloatType);
-                texture.mapping = THREE.EquirectangularReflectionMapping;
-                texture.needsUpdate = true;
-                
-                return texture;
-            };
-
-            try {
-                // Try to load a studio HDRI (this URL is a placeholder - in production you'd host your own)
-                environmentTexture = await new Promise((resolve, reject) => {
-                    // For now, use procedural environment since we don't have hosted HDRI
-                    setTimeout(() => resolve(createProceduralHDRI()), 100);
-                });
-            } catch (error) {
-                console.warn('Failed to load HDRI, using procedural environment');
-                environmentTexture = createProceduralHDRI();
             }
-
-            scene.environment = environmentTexture;
-            scene.background = environmentTexture;
             
-            // Reduce background intensity
-            if (scene.background) {
-                scene.backgroundIntensity = 0.3;
-            }
+            const texture = new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.FloatType);
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            texture.needsUpdate = true;
+            
+            return texture;
+        }
+
+        function loadEnvironment() {
+            // Create studio environment texture
+            environmentTexture = createStudioEnvironment();
+            
+            // Set as scene environment and background
+            scene.environment = environmentTexture;
+            
+            // Create a subtle gradient background instead of full HDRI
+            const backgroundGeometry = new THREE.SphereGeometry(50, 32, 16);
+            const backgroundMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    topColor: { value: new THREE.Color(0x0a0a0a) },
+                    bottomColor: { value: new THREE.Color(0x000000) },
+                    offset: { value: 0.3 },
+                    exponent: { value: 0.8 }
+                },
+                vertexShader: `
+                    varying vec3 vWorldPosition;
+                    void main() {
+                        vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+                        vWorldPosition = worldPosition.xyz;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    uniform vec3 topColor;
+                    uniform vec3 bottomColor;
+                    uniform float offset;
+                    uniform float exponent;
+                    varying vec3 vWorldPosition;
+                    
+                    void main() {
+                        float h = normalize(vWorldPosition + offset).y;
+                        gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0);
+                    }
+                `,
+                side: THREE.BackSide
+            });
+            
+            const backgroundMesh = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+            scene.add(backgroundMesh);
+            
+            console.log('Studio environment loaded successfully');
         }
 
         function setupFallbackLighting() {
