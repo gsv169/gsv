@@ -151,6 +151,7 @@
             font-size: 0.9rem;
             line-height: 1.5;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            display: none; /* Hide info panel as requested */
         }
 
         .info-title {
@@ -279,13 +280,6 @@
                         <option value="brilliant">Brilliant Cut</option>
                         <option value="emerald">Emerald Cut</option>
                         <option value="princess">Princess Cut</option>
-                        <option value="oval">Oval Cut</option>
-                        <option value="pear">Pear Cut</option>
-                        <option value="marquise">Marquise Cut</option>
-                        <option value="cushion">Cushion Cut</option>
-                        <option value="asscher">Asscher Cut</option>
-                        <option value="radiant">Radiant Cut</option>
-                        <option value="heart">Heart Cut</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -296,7 +290,14 @@
                         <option value="sapphire">Sapphire</option>
                         <option value="emerald">Emerald</option>
                         <option value="crystal">Crystal</option>
-                        <option value="opal">Opal</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Background:</label>
+                    <select id="backgroundSelect">
+                        <option value="black">Black</option>
+                        <option value="white">White</option>
+                        <option value="gray">Gray</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -508,17 +509,7 @@
             rimLight2.penumbra = 0.5;
             scene.add(rimLight2);
 
-            // Add a platform
-            const platformGeometry = new THREE.CylinderGeometry(3, 3, 0.2, 64);
-            const platformMaterial = new THREE.MeshStandardMaterial({
-                color: 0x111111,
-                metalness: 0.9,
-                roughness: 0.1
-            });
-            const platform = new THREE.Mesh(platformGeometry, platformMaterial);
-            platform.position.y = -1;
-            platform.receiveShadow = true;
-            scene.add(platform);
+            // Platform removed per new design
 
             // Create initial object
             createJewelry('brilliant', 'diamond');
@@ -628,7 +619,7 @@
                     return new THREE.MeshPhysicalMaterial({ 
                         ...baseSettings,
                         color: new THREE.Color(0.9, 0.1, 0.2),
-                        transmission: 0.95,
+                        transmission: 1.0,
                         ior: 1.762,
                         thickness: 1.5,
                         attenuationColor: new THREE.Color(0.8, 0, 0.1),
@@ -641,7 +632,7 @@
                     return new THREE.MeshPhysicalMaterial({ 
                         ...baseSettings,
                         color: new THREE.Color(0.1, 0.2, 0.9),
-                        transmission: 0.95,
+                        transmission: 1.0,
                         ior: 1.762,
                         thickness: 1.5,
                         attenuationColor: new THREE.Color(0, 0.1, 0.8),
@@ -654,7 +645,7 @@
                     return new THREE.MeshPhysicalMaterial({ 
                         ...baseSettings,
                         color: new THREE.Color(0.1, 0.8, 0.3),
-                        transmission: 0.9,
+                        transmission: 0.95,
                         ior: 1.565,
                         thickness: 1.5,
                         attenuationColor: new THREE.Color(0, 0.7, 0.2),
@@ -680,7 +671,7 @@
                     return new THREE.MeshPhysicalMaterial({ 
                         ...baseSettings,
                         color: new THREE.Color(0.95, 0.95, 0.95),
-                        transmission: 0.7,
+                        transmission: 0.8,
                         ior: 1.450,
                         thickness: 1.0,
                         attenuationColor: new THREE.Color(0.9, 0.9, 0.95),
@@ -1073,6 +1064,11 @@
                 createJewelry(cutType, e.target.value);
             });
 
+            // Background selection
+            document.getElementById('backgroundSelect').addEventListener('change', (e) => {
+                setBackground(e.target.value);
+            });
+
             // Animation toggle
             document.getElementById('animateBtn').addEventListener('click', () => {
                 isAnimating = !isAnimating;
@@ -1118,6 +1114,20 @@
             
             titleElement.textContent = `Current Gem: ${cutName} Cut ${gemName}`;
             infoElement.textContent = jewelryInfo[cutType] || "A beautiful gemstone cut showcasing exceptional craftsmanship and brilliance.";
+        }
+
+        function setBackground(type) {
+            switch (type) {
+                case 'white':
+                    scene.background = new THREE.Color(0xffffff);
+                    break;
+                case 'gray':
+                    scene.background = new THREE.Color(0x808080);
+                    break;
+                case 'black':
+                default:
+                    scene.background = new THREE.Color(0x000000);
+            }
         }
 
         function animate() {
